@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist-demo",
+    "types": ["vite/client"],
+    "lib": ["ES2022", "DOM"],
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "target": "ES2022"
+  },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.ts", "src/**/*.html", "src/**/*.scss", "index.html"],
+  "exclude": ["dist", "dist-demo"]
+}
