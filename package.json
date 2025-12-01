@@ -14,6 +14,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "start": "npm run build && npx http-server dist -p 4200",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
     "lint": "npm run typecheck",
@@ -47,6 +48,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "rxjs": "^7.8.1",
+    "http-server": "^14.1.1",
     "typescript": "^5.2.2",
     "zone.js": "^0.14.4"
   }

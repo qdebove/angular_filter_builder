@@ -26,6 +26,7 @@ bootstrapApplication(VisualDemoComponent);
 ```
 
 ## Scripts
+- `npm start` : build de la librairie puis serveur statique `http-server` sur http://localhost:4200 pour inspection locale.
 - `npm test` : rappel pour brancher vos tests unitaires (voir `docs/tests.md`).
 
 ## Export public
