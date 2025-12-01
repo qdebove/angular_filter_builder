@@ -1,11 +1,11 @@
 {
   "name": "angular-filter-builder",
   "version": "0.1.0",
-  "description": "Angular 20 filter builder library compatible with DevExtreme expressions.",
+  "description": "Angular 20 filter builder library agnostique, prête à intégrer vos propres adaptateurs.",
   "type": "module",
   "scripts": {
     "test": "echo 'No automated tests configured; see docs/tests.md for guidance.'"
   },
-  "keywords": ["angular", "filter-builder", "devextreme", "typescript", "bootstrap"],
+  "keywords": ["angular", "filter-builder", "typescript", "bootstrap"],
   "license": "MIT"
 }

@@ -1,9 +1,9 @@
 # Angular Filter Builder Library
 
 ## 1. Architecture générale
-- **Modules**: `core` (services & utils), `models`, `components`, `operators` (operator metadata via `defaultOperatorMap`), `utils` (predicate factory), `services` (filter builder, apply, DevExtreme parser).
-- **Principes**: standalone components, OnPush, Reactive Forms, strict typing, Bootstrap 5 friendly markup, DevExtreme JSON bridging.
-- **Entrées principales**: `FilterExpression<T>`, `FilterFieldDefinition<T>`, `FilterBuilderComponent` pour l'UI, `FilterApplyService` pour l'exécution, `DevExtremeParserService` pour l'interop `.NET/DevExtreme`.
+- **Modules**: `core` (services & utils), `models`, `components`, `operators` (operator metadata via `defaultOperatorMap`), `utils` (predicate factory), `services` (filter builder, apply).
+- **Principes**: standalone components, OnPush, Reactive Forms, strict typing, Bootstrap 5 friendly markup, sérialisation extensible via interfaces.
+- **Entrées principales**: `FilterExpression<T>`, `FilterFieldDefinition<T>`, `FilterBuilderComponent` pour l'UI, `FilterApplyService` pour l'exécution, `FilterSerializer` pour brancher votre propre format d'échange.
 
 ## 2. Modèles/types
 - `FilterFieldType` (`string`, `number`, `boolean`, `date`, `enum`).
@@ -12,12 +12,11 @@
 - `FilterGroup` : opérateur `and | or | not`, enfants récursifs.
 - `FilterCondition` : champ, opérateur, valeurs (`value`, `valueTo`).
 - `defaultOperatorMap` génère automatiquement les opérateurs disponibles selon le type.
-- DevExtreme types (`DevExtremeExpression`, `DevExtremePayload`) pour conversion JSON.
+- `FilterSerializer` (interface) : sérialisation/désérialisation adaptée à votre contexte.
 
 ## 3. Services
 - `FilterBuilderService<T>` : initialise des expressions vides avec groupes imbriqués.
 - `FilterApplyService` : `applyFilter<T>(data, expression)` en s'appuyant sur `buildPredicate`.
-- `DevExtremeParserService<T>` : `toDevExtreme(expression)` et `fromDevExtreme(json)`.
 - `buildPredicate` (utils) : génère une fonction `Predicate<T>` sécurisée (vérification champs existants, support `between`, `contains`, dates, nombres, booléens, enums).
 
 ## 4. Composants UI
@@ -32,9 +31,8 @@ Voir `docs/USAGE.md` pour un composant Angular exemple (`AppComponent`) et la co
 1. Définir les champs `FilterFieldDefinition<T>[]`.
 2. Créer un `FilterExpression` via `FilterBuilderService`.
 3. Lier `[expression]` et `(expressionChange)` sur `<afb-filter-builder>`.
-4. Appliquer le filtre sur des données avec `FilterApplyService.applyFilter` ou envoyer le JSON DevExtreme via `DevExtremeParserService.toDevExtreme`.
+4. Appliquer le filtre sur des données avec `FilterApplyService.applyFilter` ou sérialiser avec votre propre implémentation de `FilterSerializer`.
 
 ## 6. Tests essentiels
 - Les utilitaires (`buildPredicate`) sont déterministes et séparés pour tests unitaires (voir `docs/tests.md`).
 - Le script npm `test` rappelle où placer les tests. Un runner Node ou Vitest peut être ajouté facilement.
-

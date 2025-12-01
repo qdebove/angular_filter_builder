@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { defaultOperatorMap, FieldOperator, FilterCondition } from '../models/filter-expression.js';
+import { FilterCondition } from '../models/filter-expression.js';
 import { FilterFieldDefinition, FilterFieldType } from '../models/filter-field.js';
 import { OperatorSelectComponent } from './operator-select.component.js';
 
@@ -9,59 +10,20 @@ import { OperatorSelectComponent } from './operator-select.component.js';
   selector: 'afb-filter-condition',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, OperatorSelectComponent],
-  template: `
-    <form [formGroup]="form" class="row g-2 align-items-end border rounded p-2">
-      <div class="col-md-4">
-        <label class="form-label small text-muted">Champ</label>
-        <select class="form-select form-select-sm" formControlName="field">
-          <option *ngFor="let field of fields" [value]="field.field">{{ field.label || field.field }}</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label small text-muted">Opérateur</label>
-        <afb-operator-select
-          [fieldType]="currentField?.type || 'string'"
-          formControlName="operator"
-        ></afb-operator-select>
-      </div>
-      <div class="col-md-4" *ngIf="displayValueInput">
-        <label class="form-label small text-muted">Valeur</label>
-        <input
-          *ngIf="currentField?.type !== 'enum' && currentField?.type !== 'boolean'"
-          class="form-control form-control-sm"
-          [type]="inputType"
-          formControlName="value"
-        />
-        <select *ngIf="currentField?.type === 'enum'" class="form-select form-select-sm" formControlName="value">
-          <option *ngFor="let opt of currentField?.options" [value]="opt.value">{{ opt.label || opt.value }}</option>
-        </select>
-        <select *ngIf="currentField?.type === 'boolean'" class="form-select form-select-sm" formControlName="value">
-          <option [ngValue]="true">True</option>
-          <option [ngValue]="false">False</option>
-        </select>
-      </div>
-      <div class="col-md-4" *ngIf="form.value.operator === 'between'">
-        <label class="form-label small text-muted">Et</label>
-        <input class="form-control form-control-sm" [type]="inputType" formControlName="valueTo" />
-      </div>
-      <div class="col-md-1 d-grid">
-        <button type="button" class="btn btn-outline-danger btn-sm" (click)="remove()">
-          <i class="bi bi-trash"></i>
-        </button>
-      </div>
-    </form>
-  `,
+  templateUrl: './filter-condition.component.html',
+  styleUrls: ['./filter-condition.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FilterConditionComponent<T> {
-  @Input({ required: true }) condition!: FilterCondition<T>;
-  @Input({ required: true }) fields!: FilterFieldDefinition<T>[];
-  @Output() conditionChange = new EventEmitter<FilterCondition<T>>();
-  @Output() delete = new EventEmitter<void>();
+export class FilterConditionComponent<T> implements OnInit {
+  readonly condition = input.required<FilterCondition<T>>();
+  readonly fields = input.required<FilterFieldDefinition<T>[]>();
+  readonly conditionChange = output<FilterCondition<T>>();
+  readonly delete = output<void>();
 
-  form: FormGroup;
+  readonly form: FormGroup;
+  private readonly fb = inject(FormBuilder);
 
-  constructor(private readonly fb: FormBuilder) {
+  constructor() {
     this.form = this.fb.group({
       field: [''],
       operator: ['equals'],
@@ -69,18 +31,18 @@ export class FilterConditionComponent<T> {
       valueTo: [null]
     });
 
-    this.form.valueChanges.subscribe((value) => {
-      const updated: FilterCondition<T> = { ...this.condition, ...value } as FilterCondition<T>;
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      const updated: FilterCondition<T> = { ...this.condition(), ...value } as FilterCondition<T>;
       this.conditionChange.emit(updated);
     });
   }
 
   ngOnInit() {
-    this.form.patchValue(this.condition, { emitEvent: false });
+    this.form.patchValue(this.condition(), { emitEvent: false });
   }
 
   get currentField(): FilterFieldDefinition<T> | undefined {
-    return this.fields.find((f) => f.field === this.form.value.field) ?? this.fields[0];
+    return this.fields().find((f) => f.field === this.form.value.field) ?? this.fields()[0];
   }
 
   get inputType(): string {

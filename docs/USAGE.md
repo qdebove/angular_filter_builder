@@ -11,11 +11,16 @@ const fields: FilterFieldDefinition<Customer>[] = [
   { field: 'name', label: 'Nom', type: FilterFieldType.String },
   { field: 'createdOn', label: 'Créé le', type: FilterFieldType.Date },
   { field: 'isActive', label: 'Actif ?', type: FilterFieldType.Boolean },
-  { field: 'region', label: 'Région', type: FilterFieldType.Enum, options: [
-    { value: 'EMEA', label: 'EMEA' },
-    { value: 'NA', label: 'Amériques' },
-    { value: 'APAC', label: 'APAC' }
-  ] }
+  {
+    field: 'region',
+    label: 'Région',
+    type: FilterFieldType.Enum,
+    options: [
+      { value: 'EMEA', label: 'EMEA' },
+      { value: 'NA', label: 'Amériques' },
+      { value: 'APAC', label: 'APAC' }
+    ]
+  }
 ];
 
 const builder = new FilterBuilderService<Customer>(fields);
@@ -25,7 +30,7 @@ const expression = builder.createEmpty();
 ## Utilisation dans un composant Angular
 ```ts
 import { Component, signal } from '@angular/core';
-import { FilterBuilderComponent, FilterApplyService, DevExtremeParserService, FilterExpression } from 'angular-filter-builder';
+import { FilterBuilderComponent, FilterApplyService, FilterExpression } from 'angular-filter-builder';
 
 @Component({
   standalone: true,
@@ -37,20 +42,18 @@ import { FilterBuilderComponent, FilterApplyService, DevExtremeParserService, Fi
       (expressionChange)="update($event)"
     ></afb-filter-builder>
 
-    <pre class="bg-light p-3 mt-3">{{ devExtremeJson }}</pre>
+    <pre class="bg-light p-3 mt-3">{{ serialized }}</pre>
   `
 })
 export class AppComponent {
   private readonly applyService = new FilterApplyService();
-  private readonly parser = new DevExtremeParserService<Customer>(fields);
 
   expression = signal<FilterExpression<Customer>>(builder.createEmpty());
-  devExtremeJson = '';
+  serialized = '';
 
   update(expression: FilterExpression<Customer>) {
     this.expression.set(expression);
-    const payload = this.parser.toDevExtreme(expression);
-    this.devExtremeJson = JSON.stringify(payload, null, 2);
+    this.serialized = JSON.stringify(expression, null, 2);
   }
 }
 ```
@@ -61,10 +64,22 @@ const customers: Customer[] = fetchCustomers();
 const filtered = new FilterApplyService().applyFilter(customers, expression);
 ```
 
-## Aller/retour avec DevExtreme
+## Sérialiser pour un moteur externe
+Implémentez `FilterSerializer` pour convertir `FilterExpression` dans le format attendu par votre API ou moteur de recherche.
 ```ts
-const devExtremeExpression = [ ['name', 'contains', 'Ann'], 'and', ['isActive', '=', true] ] as const;
-const parsed = parser.fromDevExtreme(devExtremeExpression);
+import { FilterSerializer, FilterExpression } from 'angular-filter-builder';
+
+class MyApiSerializer implements FilterSerializer<Customer, Record<string, unknown>> {
+  serialize(expression: FilterExpression<Customer>) {
+    // ... convertir vers votre payload
+    return { filter: expression.root };
+  }
+
+  deserialize(payload: Record<string, unknown>): FilterExpression<Customer> {
+    // ... reconstituer le filtre à partir du payload
+    return { root: payload.filter as any, fields };
+  }
+}
 ```
 
 ## Styles

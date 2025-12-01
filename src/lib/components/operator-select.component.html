@@ -1,0 +1,3 @@
+<select class="form-select form-select-sm" [ngModel]="value" (ngModelChange)="onChangeValue($event)">
+  <option *ngFor="let operator of operators" [value]="operator">{{ operator }}</option>
+</select>

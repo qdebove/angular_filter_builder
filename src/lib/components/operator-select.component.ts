@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { defaultOperatorMap, FieldOperator } from '../models/filter-expression.js';
 import { FilterFieldType } from '../models/filter-field.js';
@@ -7,7 +8,7 @@ import { FilterFieldType } from '../models/filter-field.js';
 @Component({
   selector: 'afb-operator-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -15,22 +16,19 @@ import { FilterFieldType } from '../models/filter-field.js';
       multi: true
     }
   ],
-  template: `
-    <select class="form-select form-select-sm" [ngModel]="value" (ngModelChange)="onChangeValue($event)">
-      <option *ngFor="let operator of operators" [value]="operator">{{ operator }}</option>
-    </select>
-  `,
+  templateUrl: './operator-select.component.html',
+  styleUrls: ['./operator-select.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OperatorSelectComponent implements ControlValueAccessor {
-  @Input() fieldType: FilterFieldType = FilterFieldType.String;
+  readonly fieldType = input<FilterFieldType>(FilterFieldType.String);
   value: FieldOperator = 'equals';
 
   private onChange: (value: FieldOperator) => void = () => {};
   private onTouched: () => void = () => {};
 
   get operators(): FieldOperator[] {
-    return defaultOperatorMap[this.fieldType] ?? defaultOperatorMap[FilterFieldType.String];
+    return defaultOperatorMap[this.fieldType()] ?? defaultOperatorMap[FilterFieldType.String];
   }
 
   onChangeValue(value: FieldOperator) {
