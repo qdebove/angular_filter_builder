@@ -1,0 +1,15 @@
+.demo {
+  background: var(--bs-body-bg, #fff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  th {
+    white-space: nowrap;
+  }
+
+  .badge {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}

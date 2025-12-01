@@ -1,0 +1,52 @@
+<section class="demo p-3 border rounded">
+  <header class="mb-3">
+    <h2 class="h5 mb-1">Démo visuelle locale</h2>
+    <p class="text-muted mb-0">
+      Composant de test manuel pour la librairie : non exporté publiquement et utile pour valider les interactions
+      visuelles pendant le développement.
+    </p>
+  </header>
+
+  <afb-filter-builder
+    [expression]="expression"
+    (expressionChange)="onExpressionChange($event)"
+  />
+
+  <section class="mt-4">
+    <h3 class="h6">Aperçu des données filtrées</h3>
+    <p class="small text-muted mb-2">{{ filtered.length }} résultat(s) affiché(s) sur {{ dataset.length }} enregistrements.</p>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Société</th>
+            <th scope="col">Segment</th>
+            <th scope="col">Pays</th>
+            <th scope="col">Actif</th>
+            <th scope="col" class="text-end">Contacts</th>
+            <th scope="col">Arrivé le</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of filtered">
+            <td>{{ row.id }}</td>
+            <td class="fw-semibold">{{ row.company }}</td>
+            <td><span class="badge bg-secondary">{{ row.segment }}</span></td>
+            <td>{{ row.country }}</td>
+            <td>
+              <span [class]="row.active ? 'badge bg-success-subtle text-success-emphasis' : 'badge bg-secondary'">
+                {{ row.active ? 'Oui' : 'Non' }}
+              </span>
+            </td>
+            <td class="text-end">{{ row.contacts }}</td>
+            <td>{{ row.joined | date: 'mediumDate' }}</td>
+          </tr>
+          <tr *ngIf="!filtered.length">
+            <td colspan="7" class="text-center text-muted py-3">Aucun résultat pour les critères actuels.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>
