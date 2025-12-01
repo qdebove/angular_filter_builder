@@ -1,10 +1,10 @@
 # Angular Filter Builder (Angular 20 ready)
 
-Librairie standalone pour construire des filtres typés compatibles DevExtreme, inspirée du Filter Builder DevExpress.
+Librairie standalone pour construire des filtres typés et agnostiques vis-à-vis des moteurs tiers.
 
 - Angular 20 / TypeScript strict / Bootstrap 5
-- Composants standalone : builder, groupes, conditions, selecteurs d'opérateurs
-- Services : création, application de filtre, conversion DevExtreme
+- Composants standalone : builder, groupes, conditions, sélecteurs d'opérateurs
+- Services : création, application de filtre, interfaces pour vos propres sérialisations
 - Typage fort : champs typés, opérateurs dérivés automatiquement
 
 ## Démarrage rapide

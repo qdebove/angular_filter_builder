@@ -1,8 +1,8 @@
 # Tests unitaires suggérés
 
 - **Predicate factory** : tester `buildPredicate` avec scénarios `contains`, `between`, `isBlank`, dates, enums et booléens.
-- **DevExtreme parser** : vérifier qu'un JSON DevExtreme simple est reconstruit en `FilterExpression` et que `normalizePayload` retourne la structure attendue.
-- **FilterApplyService** : valider que les enregistrements filtrés correspondent au prédicat.
+- **Filter serialization** : valider votre implémentation de `FilterSerializer` (aller/retour entre payload et `FilterExpression`).
+- **FilterApplyService** : s'assurer que les enregistrements filtrés correspondent au prédicat.
 
 Exemple de squelette (Vitest) :
 ```ts

@@ -1,0 +1,13 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+    <span class="fw-semibold">Filter Builder</span>
+    <button class="btn btn-sm btn-light" (click)="reset()">Reset</button>
+  </div>
+  <div class="card-body">
+    <afb-filter-group
+      [group]="expression().root"
+      [fields]="expression().fields"
+      (groupChange)="onGroupChange($event)"
+    ></afb-filter-group>
+  </div>
+</div>

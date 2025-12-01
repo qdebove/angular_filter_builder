@@ -1,0 +1,36 @@
+<div class="border rounded p-3 mb-3">
+  <div class="d-flex align-items-center gap-2 mb-2">
+    <div class="btn-group">
+      <button class="btn btn-sm" [class.btn-primary]="group().operator === 'and'" [class.btn-outline-primary]="group().operator !== 'and'" (click)="changeOperator('and')">AND</button>
+      <button class="btn btn-sm" [class.btn-primary]="group().operator === 'or'" [class.btn-outline-primary]="group().operator !== 'or'" (click)="changeOperator('or')">OR</button>
+      <button class="btn btn-sm" [class.btn-primary]="group().operator === 'not'" [class.btn-outline-primary]="group().operator !== 'not'" (click)="changeOperator('not')">NOT</button>
+    </div>
+    <div class="ms-auto">
+      <button class="btn btn-sm btn-outline-secondary" (click)="addCondition()">+ Condition</button>
+      <button class="btn btn-sm btn-outline-secondary" (click)="addGroup()">+ Group</button>
+      <button *ngIf="canDelete()" class="btn btn-sm btn-outline-danger" (click)="remove()">Supprimer</button>
+    </div>
+  </div>
+
+  <div class="ms-2 border-start ps-3">
+    <ng-container *ngFor="let child of group().children; let i = index">
+      <div class="mb-3" *ngIf="isGroup(child)">
+        <afb-filter-group
+          [group]="child as FilterGroup<any>"
+          [fields]="fields()"
+          [canDelete]="true"
+          (groupChange)="updateChildGroup(i, $event)"
+          (delete)="deleteChild(i)"
+        ></afb-filter-group>
+      </div>
+      <div class="mb-2" *ngIf="isCondition(child)">
+        <afb-filter-condition
+          [condition]="child as FilterCondition<any>"
+          [fields]="fields()"
+          (conditionChange)="updateCondition(i, $event)"
+          (delete)="deleteChild(i)"
+        ></afb-filter-condition>
+      </div>
+    </ng-container>
+  </div>
+</div>

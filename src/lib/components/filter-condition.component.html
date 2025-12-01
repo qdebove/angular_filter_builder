@@ -1,0 +1,37 @@
+<form [formGroup]="form" class="row g-2 align-items-end border rounded p-2">
+  <div class="col-md-4">
+    <label class="form-label small text-muted">Champ</label>
+    <select class="form-select form-select-sm" formControlName="field">
+      <option *ngFor="let field of fields()" [value]="field.field">{{ field.label || field.field }}</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label small text-muted">Opérateur</label>
+    <afb-operator-select [fieldType]="currentField?.type || 'string'" formControlName="operator"></afb-operator-select>
+  </div>
+  <div class="col-md-4" *ngIf="displayValueInput">
+    <label class="form-label small text-muted">Valeur</label>
+    <input
+      *ngIf="currentField?.type !== 'enum' && currentField?.type !== 'boolean'"
+      class="form-control form-control-sm"
+      [type]="inputType"
+      formControlName="value"
+    />
+    <select *ngIf="currentField?.type === 'enum'" class="form-select form-select-sm" formControlName="value">
+      <option *ngFor="let opt of currentField?.options" [value]="opt.value">{{ opt.label || opt.value }}</option>
+    </select>
+    <select *ngIf="currentField?.type === 'boolean'" class="form-select form-select-sm" formControlName="value">
+      <option [ngValue]="true">True</option>
+      <option [ngValue]="false">False</option>
+    </select>
+  </div>
+  <div class="col-md-4" *ngIf="form.value.operator === 'between'">
+    <label class="form-label small text-muted">Et</label>
+    <input class="form-control form-control-sm" [type]="inputType" formControlName="valueTo" />
+  </div>
+  <div class="col-md-1 d-grid">
+    <button type="button" class="btn btn-outline-danger btn-sm" (click)="remove()">
+      <i class="bi bi-trash"></i>
+    </button>
+  </div>
+</form>
