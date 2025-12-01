@@ -26,7 +26,9 @@ bootstrapApplication(VisualDemoComponent);
 ```
 
 ## Scripts
-- `npm start` : build de la librairie puis serveur statique `http-server` sur http://localhost:4200 pour inspection locale.
+- `npm start` : sert la démo locale avec Vite sur http://localhost:4200 (rebuild incrémental + HMR).
+- `npm run build` : compile la librairie (`dist/`) **et** le bundle de démo (`dist-demo/`).
+- `npm run preview` : sert le build de démo généré (`dist-demo/`) sur http://localhost:4173.
 - `npm test` : rappel pour brancher vos tests unitaires (voir `docs/tests.md`).
 
 ## Export public

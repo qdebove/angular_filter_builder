@@ -14,9 +14,13 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "npm run build && npx http-server dist -p 4200",
-    "build": "tsc -p tsconfig.json",
+    "start": "npm run dev",
+    "dev": "vite --config vite.config.ts --host --port 4200",
+    "build": "npm run build:lib && npm run build:demo",
+    "build:lib": "tsc -p tsconfig.json",
+    "build:demo": "vite build --config vite.config.ts",
     "build:watch": "tsc -p tsconfig.json --watch",
+    "preview": "vite preview --config vite.config.ts --host --port 4173",
     "lint": "npm run typecheck",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "echo \"No automated tests configured; see docs/tests.md for guidance.\""
@@ -48,8 +52,11 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "rxjs": "^7.8.1",
+    "@analogjs/vite-plugin-angular": "^18.0.0",
     "http-server": "^14.1.1",
     "typescript": "^5.2.2",
+    "sass": "^1.77.8",
+    "vite": "^5.3.4",
     "zone.js": "^0.14.4"
   }
 }
