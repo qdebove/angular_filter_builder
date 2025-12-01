@@ -3,9 +3,51 @@
   "version": "0.1.0",
   "description": "Angular 20 filter builder library agnostique, prête à intégrer vos propres adaptateurs.",
   "type": "module",
-  "scripts": {
-    "test": "echo 'No automated tests configured; see docs/tests.md for guidance.'"
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "filter-builder",
+    "typescript",
+    "bootstrap"
+  ],
+  "engines": {
+    "node": ">=18"
   },
-  "keywords": ["angular", "filter-builder", "typescript", "bootstrap"],
-  "license": "MIT"
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "lint": "npm run typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "echo \"No automated tests configured; see docs/tests.md for guidance.\""
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "tslib": "^2.6.2"
+  },
+  "peerDependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "rxjs": "^7.8.1",
+    "zone.js": "^0.14.4"
+  },
+  "devDependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/compiler-cli": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "rxjs": "^7.8.1",
+    "typescript": "^5.2.2",
+    "zone.js": "^0.14.4"
+  }
 }
